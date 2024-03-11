@@ -1,5 +1,10 @@
 <template>
   <div>
+    <a-input
+      placeholder="关键词查询"
+      v-model="search"
+      style="width: 400px; margin-bottom: 10px"
+    />
     <a-row :gutter="[15, 15]" class="course-list">
       <a-col
         :xs="24"
@@ -47,6 +52,7 @@ import { ref, watchEffect } from "vue";
 import { getPaperAll } from "../../apis/apis";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
+const search = ref("");
 const data = ref([]);
 const router = useRouter();
 watchEffect(() => {
@@ -54,10 +60,11 @@ watchEffect(() => {
 });
 
 async function getTable() {
-  const res = await getPaperAll();
-  console.log(res);
+  const res = await getPaperAll({
+    content: search.value,
+  });
   data.value = res.data.data.filter((item) => {
-    return dayjs(item.startTime).minute(item.time) < dayjs();
+    return dayjs(item.startTime).add(item.time, "minute") < dayjs();
   });
 }
 </script>

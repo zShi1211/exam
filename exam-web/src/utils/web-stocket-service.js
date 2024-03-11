@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import noticeUrl from '@/assets/mp3/notice.mp3';
 import {h} from 'vue'
-import TextEditor from '../components/TextEditor.vue'
 export default class SocketService {
     static instance = null;
     static get Instance() {

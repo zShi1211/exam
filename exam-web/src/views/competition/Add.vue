@@ -3,16 +3,18 @@
     <a-form :model="loginForm" @submit-success="submit">
       <a-form-item
         label="竞赛题目"
-        :style="{ width: '400px' }"
-        :rules="{ require: true }"
+        field="name"
+        :style="{ width: '450px' }"
+        :rules="{ required: true }"
       >
         <a-input size="large" v-model="loginForm.name" />
       </a-form-item>
 
       <a-form-item
         label="考试时长"
-        :rules="{ require: true }"
-        :style="{ width: '400px' }"
+        field="time"
+        :rules="{ required: true }"
+        :style="{ width: '450px' }"
       >
         <a-input-number size="large" v-model="loginForm.time" :step="10">
           <template #append> 分钟 </template>
@@ -21,15 +23,16 @@
 
       <a-form-item
         label="开始时间"
-        :rules="{ require: true }"
-        :style="{ width: '400px' }"
+        field="startTime"
+        :rules="{ required: true }"
+        :style="{ width: '450px' }"
       >
         <a-date-picker show-time size="large" v-model="loginForm.startTime" />
       </a-form-item>
       <a-form-item
         label="总分"
-        :rules="{ require: true }"
-        :style="{ width: '400px' }"
+        :rules="{ required: true }"
+        :style="{ width: '450px' }"
       >
         <a-input-number
           show-time
@@ -38,8 +41,16 @@
           v-model="loginForm.totalPoints"
         />
       </a-form-item>
-
-      <a-form-item :rules="{ require: true }" :hide-label="true">
+      <a-input
+        placeholder="题目关键词查询"
+        v-model="search"
+        style="width: 400px; margin-bottom: 10px"
+      />
+      <a-form-item
+        field="_questions"
+        :rules="{ required: true }"
+        :hide-label="true"
+      >
         <a-table
           :row-selection="rowSelection"
           v-model:selectedKeys="loginForm._questions"
@@ -66,6 +77,8 @@ import { reactive, ref, watchEffect } from "vue";
 import { addPaper, getQuestionAll } from "@/apis/apis.js";
 import { Message } from "@arco-design/web-vue";
 import { addQues } from "@/apis/apis.js";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const loginForm = reactive({
   type: "single",
   _questions: [],
@@ -76,11 +89,19 @@ const rowSelection = reactive({
   onlyCurrent: false,
 });
 const submit = async () => {
+  if (loginForm._questions.length <= 0) {
+    Message.error("请添加题目");
+    return;
+  }
   const res = await addPaper(loginForm);
+
   if (res.data.status === 0) {
     Message.success("添加成功");
+    router.push({
+      name: "competition-list",
+    });
   } else {
-    Message.error("添加失败");
+    Message.error(res.data.msg);
   }
   // console.log(res);
 };
@@ -111,12 +132,15 @@ const columns = [
   //     title: "操作",
   //   },
 ];
+const search = ref("");
+
 watchEffect(() => {
   getTable();
 });
-
 async function getTable() {
-  const res = await getQuestionAll();
+  const res = await getQuestionAll({
+    content: search.value,
+  });
   //   console.log(res);
   data.value = res.data.data;
 }

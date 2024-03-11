@@ -1,5 +1,10 @@
 <template>
   <div>
+    <a-input
+      placeholder="关键词查询"
+      v-model="search"
+      style="width: 400px; margin-bottom: 10px"
+    />
     <a-table :columns="columns" :data="data">
       <template #optional="{ record }">
         <a-button @click="ondelete(record)">删除</a-button>
@@ -14,6 +19,7 @@ import { getQuestionAll, deleteQuestion } from "@/apis/apis.js";
 import { Message } from "@arco-design/web-vue";
 
 const data = ref([]);
+const search = ref("");
 const columns = [
   {
     title: "题目内容",
@@ -49,7 +55,9 @@ watchEffect(() => {
 });
 
 async function getTable() {
-  const res = await getQuestionAll();
+  const res = await getQuestionAll({
+    content: search.value,
+  });
   //   console.log(res);
   data.value = res.data.data;
 }

@@ -46,25 +46,25 @@
       <div>竞赛名称：{{ paperData.name }}</div>
       <div>总分：{{ paperData.totalPoints }}分</div>
       <div>开始时长：{{ paperData.time }}分钟</div>
-      <div>剩余时间：{{ dayjs(endDate - nowDate).format("hh:mm:ss") }}</div>
+      <div>剩余时间：{{ Math.floor((endDate - nowDate) / 1000 / 60) }}分钟</div>
       <a-button type="primary" @click="submit">提交</a-button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, onMounted } from "vue";
 import {
   getOnePaper,
   getQuestionOne,
   submitExam,
   getSInfo,
 } from "../../apis/apis";
-import { useRoute, onBeforeRouteLeave } from "vue-router";
+import { useRoute, onBeforeRouteLeave, useRouter } from "vue-router";
 import dayjs from "dayjs";
 import useUserStore from "../../sotre/user-store";
 import { Message } from "@arco-design/web-vue";
-
+import { Notification } from "@arco-design/web-vue";
 const route = useRoute();
 const userStore = useUserStore();
 const paperData = ref({});
@@ -73,16 +73,16 @@ const answer = ref({});
 const isSubmit = ref(false);
 const endDate = ref(dayjs());
 const nowDate = ref(dayjs());
-
+const router = useRouter();
 setInterval(() => {
   nowDate.value = dayjs();
   if (nowDate.value >= endDate) {
     Message.success("考试时间结束，请自动提交试卷");
     subExam();
   }
-});
+}, 1000);
 
-watchEffect(async () => {
+onMounted(async () => {
   try {
     const res = await getOnePaper({
       id: route.params.id,
@@ -93,10 +93,13 @@ watchEffect(async () => {
         id: item,
       })
     );
-    endDate.value = dayjs().minute(res.data.data.time);
+    console.log(
+      dayjs().add(res.data.data.time, "minute").format(),
+      dayjs().format()
+    );
+    endDate.value = dayjs().add(res.data.data.time, "minute");
     const re = await Promise.all(pros);
     questionsData.value = re.map((item) => item.data.data);
-    console.log(questionsData.value);
   } catch (error) {}
 });
 
@@ -123,7 +126,10 @@ async function subExam() {
       score += +r.score;
     }
   }
-
+  Notification.success({
+    title: "成绩通知",
+    content: `本次考试成绩为${score}分`,
+  });
   try {
     const res = await submitExam({
       stuId,
@@ -141,8 +147,12 @@ async function subExam() {
       id: userStore.userInfo._id,
     });
     userStore.userInfo = r.data.data;
+    router.push({
+      name: "end-competition-list",
+    });
   } catch (error) {
     Message.error("提交失败");
+    console.log(error);
   }
 }
 

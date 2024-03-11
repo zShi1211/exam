@@ -70,16 +70,6 @@ async function getTable() {
   });
   data.value = dataT;
 }
-
-async function ondelete(record) {
-  //   console.log(record);
-  const res = await deletePaper({
-    id: record._id,
-  });
-  Message.success("成功");
-  //   console.log(res);
-  getTable();
-}
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,10 @@
 <template>
   <div>
+    <a-input
+      placeholder="关键词查询"
+      v-model="search"
+      style="width: 400px; margin-bottom: 10px"
+    />
     <a-table :columns="columns" :data="data">
       <template #optional="{ record }">
         <a-button @click="ondelete(record)">删除</a-button>
@@ -12,6 +17,7 @@
 import { ref, watchEffect } from "vue";
 import { getPaperAll, deletePaper } from "@/apis/apis.js";
 import { Message } from "@arco-design/web-vue";
+const search = ref("");
 
 const data = ref([]);
 const columns = [
@@ -45,7 +51,9 @@ watchEffect(() => {
 });
 
 async function getTable() {
-  const res = await getPaperAll();
+  const res = await getPaperAll({
+    content: search.value,
+  });
   //   console.log(res);
   data.value = res.data.data;
 }

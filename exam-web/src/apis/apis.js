@@ -16,13 +16,13 @@ export const teaLogin = (data) => {
 
 
 export const addQues = data => axios.post('/api/addQues', data)
-export const getQuestionAll = data => axios.get('/api/getQuestionAll', data)
+export const getQuestionAll = data => axios.post('/api/getQuestionAll', data)
 
 export const deleteQuestion = data => axios.post('/api/deleteQues', data)
 export const getQuestionOne = data => axios.post('/api/getQuestionOne', data)
 
 export const addPaper = data => axios.post('/api/addPaper', data)
-export const getPaperAll = data => axios.get('/api/getPaperAll', data)
+export const getPaperAll = data => axios.post('/api/getPaperAll', data)
 
 export const deletePaper = data => axios.post('/api/deletePaper', data)
 export const getOnePaper = data => axios.post('/api/getOnePaper', data)

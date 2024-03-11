@@ -11,12 +11,12 @@ module.exports = function (app) {
   app.post('/api/getSInfo', Student.getUserInfo);
   app.post('/api/addQues', Teacher.addQuestion);
   app.post('/api/deleteQues', Teacher.deleteQuestion);
-  app.get('/api/getQuestionAll', Teacher.getQuestionAll);
+  app.post('/api/getQuestionAll', Teacher.getQuestionAll);
   app.post('/api/getOnePaper', Teacher.getOnePaper);
   app.post('/api/addPaper', Teacher.addPaper);
   app.post('/api/deletePaper', Teacher.deletePaper);
   app.post('/api/getQuestionOne', Teacher.getQuestionOne);
-  app.get('/api/getPaperAll', Teacher.getPaperAll);
+  app.post('/api/getPaperAll', Teacher.getPaperAll);
   app.post('/api/register', Teacher.register);
   // 用户登录
   app.post('/api/login', Teacher.signup);

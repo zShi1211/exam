@@ -6,7 +6,7 @@
 import { computed, watch, watchEffect, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import HeaderNav from "./components/HeaderNav.vue";
-import SocketService from "./utils/web-stocket-service.js";
+
 const route = useRoute();
 const router = useRouter();
 const headerVisible = ref(true);

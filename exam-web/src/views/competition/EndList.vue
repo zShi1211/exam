@@ -1,19 +1,24 @@
 <template>
   <div>
+    <a-input
+      placeholder="关键词查询"
+      v-model="search"
+      style="width: 400px; margin-bottom: 10px"
+    />
     <a-row :gutter="[15, 15]" class="course-list">
       <a-col
         :xs="24"
         :sm="12"
         :xl="8"
         :xxl="6"
-        v-for="(item, index) in userStore.userInfo.exams"
+        v-for="(item, index) in exams"
         :key="index"
         @click="
           router.push({
             name: 'sort-list',
             query: {
-              id: item._id,
-              name: item.name,
+              id: item._paper,
+              name: item.examName,
             },
           })
         "
@@ -25,7 +30,6 @@
               style="object-fit: cover"
               height="100%"
               src="/src/assets/img/login_bg.jpg"
-              show-loader
             />
           </div>
           <div class="course-info">
@@ -50,16 +54,23 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, computed } from "vue";
 import { getPaperAll, getOnePaper } from "../../apis/apis";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import useUserStore from "../../sotre/user-store";
 const userStore = useUserStore();
 const data = ref();
+const search = ref("");
+
 const router = useRouter();
+const exams = computed(() => {
+  return userStore.userInfo.exams.filter((item) =>
+    item.examName.includes(search.value)
+  );
+});
 watchEffect(() => {
-  console.log(userStore.userInfo);
+  //   console.log(userStore.userInfo);
   //   getTable();
 });
 
@@ -76,6 +87,7 @@ async function getTable() {
   // const res = await getPaperAll();
   //   console.log(res);
   data.value = re.map((item) => item.data.data);
+  console.log(data.value);
 }
 </script>
 

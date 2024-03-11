@@ -178,7 +178,6 @@
 <script setup>
 import { useRouter } from "vue-router";
 import useUserStore from "../sotre/user-store";
-import AuthCard from "./auth/AuthCard.vue";
 import { computed, ref, watchEffect, reactive } from "vue";
 import { useDark, useToggle, useFullscreen } from "@vueuse/core";
 const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();

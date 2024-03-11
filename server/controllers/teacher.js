@@ -135,7 +135,9 @@ exports.addQuestion = async function (req, res) {
 }
 
 exports.getQuestionAll = async function (req, res) {
-  const r = await Question.find()
+  const content = req.body.content
+const reg =   new RegExp(content, 'i')
+  const r = await Question.find({content:reg}).exec()
   res.json({
     status: 0,
     msg: 'sucess',
@@ -182,7 +184,9 @@ exports.addPaper = async function (req, res) {
 }
 
 exports.getPaperAll = async function (req, res) {
-  const r = await Paper.find()
+  const content = req.body.content
+const reg =   new RegExp(content, 'i')
+  const r = await Paper.find({name: reg})
   res.json({
     status: 0,
     msg: 'sucess',

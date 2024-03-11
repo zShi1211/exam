@@ -1,5 +1,10 @@
 <template>
   <div>
+    <a-input
+      placeholder="关键词查询"
+      v-model="search"
+      style="width: 400px; margin-bottom: 10px"
+    />
     <a-row :gutter="[15, 15]" class="course-list">
       <a-col
         :xs="24"
@@ -40,6 +45,8 @@ import { getPaperAll } from "../../apis/apis";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { Message } from "@arco-design/web-vue";
+import { Notification } from "@arco-design/web-vue";
+const search = ref("");
 const data = ref([]);
 const router = useRouter();
 watchEffect(() => {
@@ -47,32 +54,45 @@ watchEffect(() => {
 });
 
 async function getTable() {
-  const res = await getPaperAll();
+  const res = await getPaperAll({
+    content: search.value,
+  });
   //   console.log(res);
+  res.data.data.forEach((item) => {
+    const res = getStatus(item);
+    if (res === "竞赛进行中") {
+      Notification.warning({
+        title: "竞赛开始提醒",
+        content: `${item.name} 竞赛已开始，请尽快开始答题`,
+        closable: true,
+        duration: 100000,
+      });
+    }
+  });
   data.value = res.data.data;
 }
 
 function getStatus(item) {
-  return dayjs() >= dayjs(item.startTime).minute(item.time)
+  return dayjs() >= dayjs(item.startTime).add(item.time, "minute")
     ? "竞赛已结束"
     : dayjs(item.startTime) < dayjs() &&
-      dayjs() < dayjs(item.startTime).minute(item.time)
+      dayjs() < dayjs(item.startTime).add(item.time, "minute")
     ? "竞赛进行中"
     : "竞赛未开始";
 }
 
 function onClickExam(item) {
-  if (dayjs() >= dayjs(item.startTime).minute(item.time)) {
+  if (dayjs() >= dayjs(item.startTime).add(item.time, "minute")) {
     Message.error("竞赛已结束");
   } else if (
     !(
       dayjs(item.startTime) < dayjs() &&
-      dayjs() < dayjs(item.startTime).minute(item.time)
+      dayjs() < dayjs(item.startTime).add(item.time, "minute")
     )
   ) {
     Message.error("竞赛未开始");
   } else {
-    const res = window.confirm("确认开始禁赛吗？");
+    const res = window.confirm("确认开始竞赛吗？");
     if (res) {
       router.push("/exam/" + item._id);
     }
