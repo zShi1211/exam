@@ -8,6 +8,15 @@
         :xxl="6"
         v-for="(item, index) in userStore.userInfo.exams"
         :key="index"
+        @click="
+          router.push({
+            name: 'sort-list',
+            query: {
+              id: item._id,
+              name: item.name,
+            },
+          })
+        "
       >
         <div class="course-item">
           <div class="course-picture">

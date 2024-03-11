@@ -58,7 +58,7 @@ const loginForm = reactive({
 const submit = async () => {
   const res = await addQues({
     ...loginForm,
-    selection: loginForm.selection.split(";"),
+    selection: loginForm.selection?.split(";"),
   });
   Message.success("成功");
 

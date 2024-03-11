@@ -1,28 +1,59 @@
 <template>
   <div>
     <a-form :model="loginForm" @submit-success="submit">
-      <a-form-item label="竞赛题目" :style="{ width: '400px' }">
+      <a-form-item
+        label="竞赛题目"
+        :style="{ width: '400px' }"
+        :rules="{ require: true }"
+      >
         <a-input size="large" v-model="loginForm.name" />
       </a-form-item>
 
-      <a-form-item label="考试时长" :style="{ width: '400px' }">
-        <a-input size="large" format="HH:mm" v-model="loginForm.time" />
+      <a-form-item
+        label="考试时长"
+        :rules="{ require: true }"
+        :style="{ width: '400px' }"
+      >
+        <a-input-number size="large" v-model="loginForm.time" :step="10">
+          <template #append> 分钟 </template>
+        </a-input-number>
       </a-form-item>
 
-      <a-form-item label="开始时间" :style="{ width: '400px' }">
+      <a-form-item
+        label="开始时间"
+        :rules="{ require: true }"
+        :style="{ width: '400px' }"
+      >
         <a-date-picker show-time size="large" v-model="loginForm.startTime" />
       </a-form-item>
-      <a-form-item label="总分" :style="{ width: '400px' }">
-        <a-input show-time size="large" v-model="loginForm.totalPoints" />
-      </a-form-item>
-      <a-table
-        :row-selection="rowSelection"
-        v-model:selectedKeys="loginForm._questions"
-        :columns="columns"
-        :data="data"
-        row-key="_id"
+      <a-form-item
+        label="总分"
+        :rules="{ require: true }"
+        :style="{ width: '400px' }"
       >
-      </a-table>
+        <a-input-number
+          show-time
+          size="large"
+          :step="10"
+          v-model="loginForm.totalPoints"
+        />
+      </a-form-item>
+
+      <a-form-item
+        label="题目"
+        :style="{ width: '400px' }"
+        :rules="{ require: true }"
+      >
+        <a-table
+          :row-selection="rowSelection"
+          v-model:selectedKeys="loginForm._questions"
+          :columns="columns"
+          :data="data"
+          row-key="_id"
+        >
+        </a-table>
+      </a-form-item>
+
       <a-button
         type="primary"
         html-type="sumbit"
@@ -49,10 +80,12 @@ const rowSelection = reactive({
   onlyCurrent: false,
 });
 const submit = async () => {
-  console.log(loginForm);
   const res = await addPaper(loginForm);
-  Message.success("成功");
-
+  if (res.data.status === 0) {
+    Message.success("添加成功");
+  } else {
+    Message.error("添加失败");
+  }
   // console.log(res);
 };
 

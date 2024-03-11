@@ -18,6 +18,12 @@ const routes = [
       header: false,
     },
   },
+  {
+    path: "/",
+    redirect() {
+      return { path: '/home' }
+    }
+  },
   ...homes,
 ];
 const router = createRouter({

@@ -22,24 +22,24 @@ const headerVisible = ref(true);
     console.log("已登录：连接webstock");
   }
 }); */
-watch(
-  () => route.name,
-  () => {
-    const meta = route.meta;
-    let title = meta["title"];
-    let header = meta["header"];
-    if (header != undefined) {
-      headerVisible.value = header;
-    } else {
-      headerVisible.value = true;
-    }
+// watch(
+//   () => route.name,
+//   () => {
+//     const meta = route.meta;
+//     let title = meta["title"];
+//     let header = meta["header"];
+//     if (header != undefined) {
+//       headerVisible.value = header;
+//     } else {
+//       headerVisible.value = true;
+//     }
 
-    if (title != undefined) {
-      title = "-" + title;
-    }
-    document.title = "为考" + (title ?? "");
-  }
-);
+//     if (title != undefined) {
+//       title = "-" + title;
+//     }
+//     document.title = "为考" + (title ?? "");
+//   }
+// );
 </script>
 <style lang="less">
 body,
