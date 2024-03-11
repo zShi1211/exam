@@ -63,7 +63,14 @@ let mdHash = function (data) {
 exports.register = async function (req, res) {
   let userInfo = req.body;
   // userInfo.passWord = mdHash(userInfo.passWord);
-
+  const t = await Teacher.findOne({ username: userInfo.username })
+  if (t) {
+    res.json({
+      status: 1,
+      msg: '用户已存在'
+    })
+    return
+  }
   if (userInfo.password !== userInfo.checkPass) {
     res.json({
       status: 1,
@@ -159,10 +166,18 @@ exports.getQuestionOne = async function (req, res) {
 
 exports.addPaper = async function (req, res) {
   let userInfo = req.body;
+  const p = await Paper.findOne({ name: userInfo.name })
+  if (p) {
+    res.json({
+      status: 1,
+      msg: '竞赛名称重复'
+    })
+    return
+  }
   await Paper.create(userInfo)
   res.json({
     status: 0,
-    msg: 'sucess'
+    msg: '添加成功'
   })
 }
 

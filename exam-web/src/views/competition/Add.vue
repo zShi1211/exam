@@ -39,11 +39,7 @@
         />
       </a-form-item>
 
-      <a-form-item
-        label="题目"
-        :style="{ width: '400px' }"
-        :rules="{ require: true }"
-      >
+      <a-form-item :rules="{ require: true }" :hide-label="true">
         <a-table
           :row-selection="rowSelection"
           v-model:selectedKeys="loginForm._questions"

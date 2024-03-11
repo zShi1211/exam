@@ -66,7 +66,14 @@ exports.submitExam = async function (req, res) {
 exports.register = async function (req, res) {
   let userInfo = req.body;
   // userInfo.passWord = mdHash(userInfo.passWord);
-
+  const r = await Student.findOne({ username: userInfo.username })
+  if (r) {
+    res.json({
+      status: 1,
+      msg: '用户已存在'
+    })
+    return
+  }
   if (userInfo.password !== userInfo.checkPass) {
     res.json({
       status: 1,
