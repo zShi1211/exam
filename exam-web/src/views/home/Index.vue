@@ -104,12 +104,19 @@ const stuList = [
   {
     name: "竞赛列表",
     icon: IconBookmark,
+    key: "attend-competition-list",
+    params: {},
+    visble: true,
+  },
+  {
+    name: "已报名竞赛",
+    icon: IconBookmark,
     key: "stu-competition-list",
     params: {},
     visble: true,
   },
   {
-    name: "已参与竞赛",
+    name: "已完成竞赛",
     icon: IconBookmark,
     key: "end-competition-list",
     params: {},

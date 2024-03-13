@@ -8,6 +8,7 @@ const Exam = () => import("../views/competition/Exam.vue")
 const EndExam = () => import("../views/competition/EndList.vue")
 const TEndExam = () => import("../views/competition/TEndList.vue")
 const Sort = () => import("../views/competition/Sort.vue")
+const SignUp = () => import("../views/competition/SignUp.vue")
 const homes = [
     {
         path: '/home',
@@ -74,6 +75,14 @@ const homes = [
                 path: "sort-list",
                 component: Sort,
                 name: 'sort-list',
+                meta: {
+                    title: '我的课程'
+                }
+            },
+            {
+                path: "attend-competition-list",
+                component: SignUp,
+                name: 'attend-competition-list',
                 meta: {
                     title: '我的课程'
                 }

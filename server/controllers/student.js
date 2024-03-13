@@ -27,6 +27,29 @@ let mdHash = function (data) {
 // exports.init = student.save((err,doc) => {
 //   console.log(err);
 // });
+
+exports.signupExam = async function (req, res) {
+  const {stuId ,paperId} =  req.body;
+  const r = await Student.findOne({_id: stuId})
+  console.log(r)
+ const p =  r.attendExams.includes(paperId)
+ if(p){
+  res.json({
+    status: 1,
+    msg: "不可重复参与考试",
+  })
+ }else{
+  r.attendExams.push(paperId);
+  r.save()
+  res.json({
+    status: 0,
+    msg: 'success',
+    data: r
+  })
+
+ }
+ 
+}
 exports.getStuAll = async function (req, res) {
   const r = await Student.find()
   res.json({

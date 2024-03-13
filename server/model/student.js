@@ -7,6 +7,7 @@ var StudentSchema = new Schema({
   age: Number,
   gender: Boolean,
   type: Number,
+  attendExams: [{ type: Schema.Types.ObjectId, ref: 'Paper' }],
   exams: [{ // 参加的考试
     _paper: { type: Schema.Types.ObjectId, ref: 'Paper' },
     date: Date,

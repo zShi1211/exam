@@ -28,6 +28,7 @@
             <a-image
               width="100%"
               style="object-fit: cover"
+              :preview="false"
               height="100%"
               src="/src/assets/img/login_bg.jpg"
               show-loader
@@ -37,7 +38,7 @@
             <h3 class="title">{{ item.name }}</h3>
             <p class="author">
               开始时间：
-              {{ dayjs(item.startTime).format("YYYY-MM-DD hh:mm:ss") }}
+              {{ dayjs(item.startTime).format("YYYY-MM-DD HH:mm:ss") }}
             </p>
             <p class="author">状态： 竞赛已结束</p>
           </div>

@@ -11,7 +11,7 @@
         :sm="12"
         :xl="8"
         :xxl="6"
-        v-for="item in data"
+        v-for="item in exams"
         :key="item._id"
         @click="onClickExam(item)"
       >
@@ -20,6 +20,7 @@
             <a-image
               width="100%"
               style="object-fit: cover"
+              :preview="false"
               height="100%"
               src="/src/assets/img/login_bg.jpg"
               show-loader
@@ -29,7 +30,7 @@
             <h3 class="title">{{ item.name }}</h3>
             <p class="author">
               开始时间：
-              {{ dayjs(item.startTime).format("YYYY-MM-DD hh:mm:ss") }}
+              {{ dayjs(item.startTime).format("YYYY-MM-DD HH:mm:ss") }}
             </p>
             <p class="author">状态：{{ getStatus(item) }}</p>
           </div>
@@ -40,37 +41,59 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
-import { getPaperAll } from "../../apis/apis";
+import { ref, watchEffect, computed } from "vue";
+import { getPaperAll, getOnePaper } from "../../apis/apis";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { Message } from "@arco-design/web-vue";
+const userStore = useUserStore();
+import useUserStore from "../../sotre/user-store";
 import { Notification } from "@arco-design/web-vue";
 const search = ref("");
 const data = ref([]);
+const exams = computed(() => {
+  return data.value.filter((item) => item.name.includes(search.value));
+});
 const router = useRouter();
 watchEffect(() => {
   getTable();
 });
-
 async function getTable() {
-  const res = await getPaperAll({
-    content: search.value,
-  });
+  //   console.log(userStore.userInfo);
+  const pros = userStore.userInfo.attendExams
+    .filter((item) => {
+      return !userStore.userInfo.exams.find((i) => item === i._paper);
+    })
+    .map((item) =>
+      getOnePaper({
+        id: item,
+      })
+    );
+  const re = await Promise.all(pros);
+  //   console.log(re);
+  //   console.log(userStore.userInfo.exams);
+  // const res = await getPaperAll();
   //   console.log(res);
-  res.data.data.forEach((item) => {
-    const res = getStatus(item);
-    if (res === "竞赛进行中") {
-      Notification.warning({
-        title: "竞赛开始提醒",
-        content: `${item.name} 竞赛已开始，请尽快开始答题`,
-        closable: true,
-        duration: 100000,
-      });
-    }
-  });
-  data.value = res.data.data;
+  data.value = re.map((item) => item.data.data);
 }
+// async function getTable() {
+//   const res = await getPaperAll({
+//     content: search.value,
+//   });
+//   //   console.log(res);
+//   res.data.data.forEach((item) => {
+//     const res = getStatus(item);
+//     if (res === "竞赛进行中") {
+//       Notification.warning({
+//         title: "竞赛开始提醒",
+//         content: `${item.name} 竞赛已开始，请尽快开始答题`,
+//         closable: true,
+//         duration: 100000,
+//       });
+//     }
+//   });
+//   data.value = res.data.data;
+// }
 
 function getStatus(item) {
   return dayjs() >= dayjs(item.startTime).add(item.time, "minute")
