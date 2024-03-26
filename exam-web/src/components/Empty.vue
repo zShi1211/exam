@@ -3,7 +3,7 @@
     <a-result status="404" subtitle="页面不存在~">
       <template #extra>
         <a-space>
-          <a-button type="primary" @click="$router.push({ name: 'home' })"
+          <a-button type="primary" @click="$router.push({ path: '/' })"
             >回到首页</a-button
           >
         </a-space>

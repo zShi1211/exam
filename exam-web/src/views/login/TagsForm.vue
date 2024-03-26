@@ -45,7 +45,11 @@
     <!-- 注册表单 -->
     <div class="tag_login" v-if="loginType == 1">
       <a-form :model="registerForm" ref="register" @submit-success="submit">
-        <a-form-item field="username" :hide-label="true">
+        <a-form-item
+          field="username"
+          :hide-label="true"
+          :rules="{ required: true, message: '账号不能为空' }"
+        >
           <a-input
             size="large"
             v-model="registerForm.username"
@@ -53,7 +57,11 @@
           >
           </a-input>
         </a-form-item>
-        <a-form-item field="nickname" :hide-label="true">
+        <a-form-item
+          field="nickname"
+          :hide-label="true"
+          :rules="{ required: true, message: '昵称不能为空' }"
+        >
           <a-input
             size="large"
             v-model="registerForm.nickname"
@@ -67,7 +75,11 @@
             <a-radio :value="false">男</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item field="age" :hide-label="true">
+        <a-form-item
+          field="age"
+          :hide-label="true"
+          :rules="{ required: true, message: '年龄不能为空' }"
+        >
           <a-input
             size="large"
             v-model="registerForm.age"

@@ -6,9 +6,17 @@
 import { computed, watch, watchEffect, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import HeaderNav from "./components/HeaderNav.vue";
+import useUserStore from "./sotre/user-store";
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
+const selectedKeys = ref([]);
+if (!userStore.userInfo) {
+  router.push({
+    name: "Login",
+  });
+}
 const headerVisible = ref(true);
 
 //登录成功后连接
