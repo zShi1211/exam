@@ -27,19 +27,16 @@ let mdHash = function (data) {
 // exports.init = student.save((err,doc) => {
 //   console.log(err);
 // });
-
-exports.signupExam = async function (req, res) {
-  const {stuId ,paperId} =  req.body;
-  const r = await Student.findOne({_id: stuId})
+exports.addComment = async function (req, res) {
+  const { commentData, paperId } = req.body;
+  const r = await Paper.findOne({ _id: paperId })
   console.log(r)
- const p =  r.attendExams.includes(paperId)
- if(p){
-  res.json({
-    status: 1,
-    msg: "不可重复参与考试",
-  })
- }else{
-  r.attendExams.push(paperId);
+  if (Array.isArray(r.comment)) {
+    r.comment.push(commentData);
+
+  } else {
+    r.comment = [commentData]
+  }
   r.save()
   res.json({
     status: 0,
@@ -47,8 +44,29 @@ exports.signupExam = async function (req, res) {
     data: r
   })
 
- }
- 
+
+}
+exports.signupExam = async function (req, res) {
+  const { stuId, paperId } = req.body;
+  const r = await Student.findOne({ _id: stuId })
+  console.log(r)
+  const p = r.attendExams.includes(paperId)
+  if (p) {
+    res.json({
+      status: 1,
+      msg: "不可重复参与考试",
+    })
+  } else {
+    r.attendExams.push(paperId);
+    r.save()
+    res.json({
+      status: 0,
+      msg: 'success',
+      data: r
+    })
+
+  }
+
 }
 exports.getStuAll = async function (req, res) {
   const r = await Student.find()

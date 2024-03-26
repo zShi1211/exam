@@ -5,7 +5,12 @@ var PapersSchema = new Schema({
     totalPoints: Number, // 总分
     time: Number, // 考试时间
     startTime: Date, // 开始时间
-    _questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }] // 题
+    _questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }], // 题
+    comment: [{
+        name: String,
+        time: Date,
+        content: String
+    }]
 })
 module.exports = mongoose.model('Paper', PapersSchema);
 
