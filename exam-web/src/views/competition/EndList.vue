@@ -13,15 +13,6 @@
         :xxl="6"
         v-for="(item, index) in exams"
         :key="index"
-        @click="
-          router.push({
-            name: 'sort-list',
-            query: {
-              id: item._paper,
-              name: item.examName,
-            },
-          })
-        "
       >
         <div class="course-item">
           <div class="course-picture">
@@ -47,6 +38,24 @@
               得分：
               {{ item.score }}
             </p>
+          </div>
+          <div class="entry">
+            <a-space>
+              <a-button
+                type="primary"
+                @click="
+                  router.push({
+                    name: 'sort-list',
+                    query: {
+                      id: item._paper,
+                      name: item.examName,
+                    },
+                  })
+                "
+                >查看排名</a-button
+              >
+              <a-button>查看错题</a-button>
+            </a-space>
           </div>
         </div>
       </a-col>
@@ -169,5 +178,9 @@ async function getTable() {
       color: var(--color-text-2);
     }
   }
+}
+
+.entry {
+  padding: 10px;
 }
 </style>

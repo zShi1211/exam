@@ -11,16 +11,19 @@
     <div class="comment">
       <div class="input_box">
         <a-textarea placeholder="说你想说~" allow-clear v-model="commentVal" />
-        <a-button type="primary" @click="fetchAddComment">发布</a-button>
+        <a-button type="primary" @click="fetchAddComment">发布评论</a-button>
       </div>
 
-      <a-comment
-        v-for="item in commentList"
-        :key="item.time"
-        :author="item.name"
-        :content="item.content"
-        :datetime="dayjs(item.time).format('YYYY-MM-DD HH:mm')"
-      />
+      <div class="comment_box">
+        <h1>评论列表</h1>
+        <a-comment
+          v-for="item in commentList"
+          :key="item.time"
+          :author="item.name"
+          :content="item.content"
+          :datetime="dayjs(item.time).format('YYYY-MM-DD HH:mm')"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -135,8 +138,15 @@ async function fetchAddComment() {
 }
 .comment {
   margin-top: 20px;
+  width: 600px;
 }
 .input_box {
   margin-bottom: 10px;
+}
+.comment_box {
+  margin-top: 30px;
+  h1 {
+    margin-bottom: 10px;
+  }
 }
 </style>
