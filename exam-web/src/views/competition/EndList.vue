@@ -54,7 +54,17 @@
                 "
                 >查看排名</a-button
               >
-              <a-button>查看错题</a-button>
+              <a-button
+                @click="
+                  router.push({
+                    name: 'Wrong',
+                    query: {
+                      id: item._paper,
+                    },
+                  })
+                "
+                >查看错题</a-button
+              >
             </a-space>
           </div>
         </div>
