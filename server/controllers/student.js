@@ -69,13 +69,26 @@ exports.signupExam = async function (req, res) {
 
 }
 exports.getStuAll = async function (req, res) {
-  const r = await Student.find()
+  const content = req.body.content
+  const reg = new RegExp(content, 'i')
+  const r = await Student.find({ nickname: reg }).exec()
   res.json({
     status: 0,
     msg: 'success',
     data: r
   })
 }
+
+exports.deleteStu = async function (req, res) {
+  const id = req.body.id
+  const r = await Student.deleteOne({ _id: id })
+  res.json({
+    status: 0,
+    msg: 'success',
+    data: r
+  })
+}
+
 // 提交考试
 exports.submitExam = async function (req, res) {
   const stuId = req.body.stuId;

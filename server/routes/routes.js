@@ -5,6 +5,7 @@ var Teacher = require('../controllers/teacher'),
 module.exports = function (app) {
 
   /*----------------------教师用户----------------------*/
+  app.post('/api/deleteStu', Student.deleteStu);
   app.post('/api/addComment', Student.addComment);
   app.post('/api/signupExam', Student.signupExam);
   app.post('/api/getStuAll', Student.getStuAll);

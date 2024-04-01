@@ -159,6 +159,13 @@ const teacherList = [
     params: {},
     visble: true,
   },
+  {
+    name: "用户管理",
+    icon: IconBookmark,
+    key: "UserOperate",
+    params: {},
+    visble: true,
+  },
 ];
 const navList = shallowRef([]);
 const checkNav = () => {

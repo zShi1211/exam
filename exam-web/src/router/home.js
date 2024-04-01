@@ -10,12 +10,21 @@ const TEndExam = () => import("../views/competition/TEndList.vue")
 const Sort = () => import("../views/competition/Sort.vue")
 const SignUp = () => import("../views/competition/SignUp.vue")
 const Wrong = () => import("../views/competition/Wrong.vue")
+const UserOperate = () => import("../views/admin/userAdmin.vue")
 const homes = [
     {
         path: '/home',
         component: Home,
         name: 'Home',
         children: [
+            {
+                path: "UserOperate",
+                component: UserOperate,
+                name: 'UserOperate',
+                meta: {
+                    title: '我的课程'
+                }
+            },
             {
                 path: "question-list",
                 component: question,
