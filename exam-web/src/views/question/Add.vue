@@ -58,19 +58,50 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { Message } from "@arco-design/web-vue";
-import { addQues } from "@/apis/apis.js";
-import { useRouter } from "vue-router";
+import { addQues, getQuestionOne, updateQuestion } from "@/apis/apis.js";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
-const loginForm = reactive({
+const route = useRoute();
+const loginForm = ref({
   type: "single",
 });
 
+onMounted(async () => {
+  if (route.query.id) {
+    const res = await getQuestionOne({
+      id: route.query.id,
+    });
+    loginForm.value = res.data.data;
+    console.log(res);
+  }
+});
+
 const submit = async () => {
+  console.log(loginForm);
+  if (route.query.id) {
+    const selection = Array.isArray(loginForm.value.selection)
+      ? loginForm.value.selection
+      : loginForm.value.selection?.split(";");
+    const res = await updateQuestion({
+      ...loginForm.value,
+      selection,
+    });
+    if (res.data.status === 0) {
+      Message.success("修改成功");
+      router.push({
+        name: "question-list",
+      });
+    } else {
+      Message.error("修改失败");
+    }
+
+    return;
+  }
   const res = await addQues({
-    ...loginForm,
-    selection: loginForm.selection?.split(";"),
+    ...loginForm.value,
+    selection: loginForm.value.selection?.split(";"),
   });
   if (res.data.status === 0) {
     Message.success("添加成功");

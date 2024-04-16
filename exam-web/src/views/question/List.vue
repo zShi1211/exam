@@ -7,7 +7,16 @@
     />
     <a-table :columns="columns" :data="data">
       <template #optional="{ record }">
-        <a-button @click="ondelete(record)">删除</a-button>
+        <a-space>
+          <a-button
+            type="primary"
+            @click="
+              router.push({ name: 'question-add', query: { id: record._id } })
+            "
+            >编辑</a-button
+          >
+          <a-button @click="ondelete(record)">删除</a-button>
+        </a-space>
       </template>
     </a-table>
   </div>
@@ -17,7 +26,10 @@
 import { ref, watchEffect } from "vue";
 import { getQuestionAll, deleteQuestion } from "@/apis/apis.js";
 import { Message } from "@arco-design/web-vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
+console.log(router);
 const data = ref([]);
 const search = ref("");
 const columns = [

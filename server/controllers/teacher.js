@@ -144,6 +144,17 @@ exports.getQuestionAll = async function (req, res) {
     data: r
   })
 }
+exports.updateQuestion = async function (req, res) {
+  let userInfo = req.body;
+  const r = await Question.updateOne({ '_id': userInfo._id }, userInfo)
+
+
+  res.json({
+    status: 0,
+    msg: 'sucess',
+  })
+}
+
 exports.deleteQuestion = async function (req, res) {
   let { id } = req.body;
   const r = await Question.deleteOne({
@@ -580,41 +591,41 @@ exports.findPaper = function (req, res) {
 };
 
 // 修改试卷-修改试题
-exports.updateQuestion = function (req, res) {
-  let userName = req.session.userName;
-  let params = req.body.params;
-  Teacher.findOne({ 'userName': userName }, (err, doc) => {
-    if (err) {
-      res.json({
-        status: '1',
-        msg: err.message
-      })
-    } else {
-      if (doc) {
-        Question.update({ "_id": params._id }, params, (err1, doc1) => {
-          if (err1) {
-            res.json({
-              status: '1',
-              msg: err1.message
-            })
-          } else {
-            if (doc1) {
-              res.json({
-                status: '0',
-                msg: 'success'
-              })
-            } else {
-              res.json({
-                status: '1',
-                msg: '没找到题目'
-              })
-            }
-          }
-        })
-      }
-    }
-  })
-};
+// exports.updateQuestion = function (req, res) {
+//   let userName = req.session.userName;
+//   let params = req.body.params;
+//   Teacher.findOne({ 'userName': userName }, (err, doc) => {
+//     if (err) {
+//       res.json({
+//         status: '1',
+//         msg: err.message
+//       })
+//     } else {
+//       if (doc) {
+//         Question.update({ "_id": params._id }, params, (err1, doc1) => {
+//           if (err1) {
+//             res.json({
+//               status: '1',
+//               msg: err1.message
+//             })
+//           } else {
+//             if (doc1) {
+//               res.json({
+//                 status: '0',
+//                 msg: 'success'
+//               })
+//             } else {
+//               res.json({
+//                 status: '1',
+//                 msg: '没找到题目'
+//               })
+//             }
+//           }
+//         })
+//       }
+//     }
+//   })
+// };
 
 // 修改试卷-修改试卷
 exports.updatePaper = function (req, res) {
